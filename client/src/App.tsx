@@ -1,58 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  );
-}
+import { Button, useColorMode } from "@chakra-ui/react";
+import { MoonIcon } from "@chakra-ui/icons";
+
+import Home from "./pages/Home";
+import SingleplayerGame from "./pages/SingleplayerGame";
+
+const App = () => {
+    const { toggleColorMode } = useColorMode();
+
+    return (
+        <BrowserRouter>
+            <Button
+                margin={5}
+                onClick={toggleColorMode}
+                variant="ghost"
+                pos={"absolute"}
+                right={0}
+            >
+                <MoonIcon w={4} h={4} />
+            </Button>
+
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/singleplayer" element={<SingleplayerGame />} />
+            </Routes>
+        </BrowserRouter>
+    );
+};
 
 export default App;
