@@ -1,4 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import FetchSolution from "../types/hangmanApi/fetchSolution";
+import FetchSolutionArgs from "../types/hangmanApi/FetchSolutionArgs";
 
 import GuessOneLetter from "../types/hangmanApi/GuessOneLetter";
 import GuessOneLetterArgs from "../types/hangmanApi/GuessOneLetterArgs";
@@ -19,7 +21,14 @@ export const hangmanApi = createApi({
                 method: "PUT",
             }),
         }),
+        fetchSolution: builder.query<FetchSolution, FetchSolutionArgs>({
+            query: (args) => `/hangman?token=${args.gameToken}`,
+        }),
     }),
 });
 
-export const { useCreateNewGameQuery, useGuessOneLetterQuery } = hangmanApi;
+export const {
+    useCreateNewGameQuery,
+    useGuessOneLetterQuery,
+    useFetchSolutionQuery,
+} = hangmanApi;

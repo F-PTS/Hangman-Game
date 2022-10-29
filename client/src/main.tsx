@@ -16,6 +16,3 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         </ChakraProvider>
     </React.StrictMode>
 );
-
-// https://hangman-api.herokuapp.com/api
-// https://api.dictionaryapi.dev/api/v2/entries/en/<word>

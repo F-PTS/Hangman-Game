@@ -12,7 +12,10 @@ import Hangman6 from "../assets/Hangman6";
 import Hangman7 from "../assets/Hangman7";
 import Hangman8 from "../assets/Hangman8";
 
-const Hangman = ({ amountOfWrongAnswers }: HangmanProps) => {
+const Hangman = ({
+    amountOfWrongAnswers,
+    maxMaxAmountOfWrongAnswers,
+}: HangmanProps) => {
     const color = useColorModeValue("black", "white");
 
     const arrayOfHangmans = [
@@ -30,7 +33,10 @@ const Hangman = ({ amountOfWrongAnswers }: HangmanProps) => {
         <Box marginTop={5}>
             <VStack>
                 {arrayOfHangmans[amountOfWrongAnswers]}
-                <Text>Wrong answers: {amountOfWrongAnswers} / 7</Text>
+                <Text>
+                    Wrong answers: {amountOfWrongAnswers} /{" "}
+                    {maxMaxAmountOfWrongAnswers}
+                </Text>
             </VStack>
         </Box>
     );

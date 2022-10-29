@@ -1,27 +1,36 @@
-import { Button, Wrap, WrapItem } from "@chakra-ui/react";
+import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
+import {
+    Box,
+    Button,
+    Center,
+    Flex,
+    Spinner,
+    VStack,
+    Wrap,
+    WrapItem,
+} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useGuessOneLetterQuery } from "../RTK Query/hangmanApiSlice";
+import Letter from "../types/Letter";
 import LetterKeyBoardProps from "../types/LetterKeyBoardProps";
 
 import englishCharacters from "../utils/englishCharacters";
-
-interface Letter {
-    value: string;
-    isClicked: boolean;
-}
-
-const getLetters = () =>
-    englishCharacters.map((value) => ({ value, isClicked: false }));
+import getLetters from "../utils/getLetters";
+import AnswerIcon from "./AnswerIcon";
 
 const LetterKeyBoard = ({
     changeAmountOfWrongAnswer,
-    changeHangmanState,
+    changeHangmanWord,
+    isGameOver,
     gameToken,
+    skip,
+    changeSkip,
 }: LetterKeyBoardProps) => {
-    const [letterList, setLetterList] = useState<Letter[]>(getLetters());
+    const [letterList, setLetterList] = useState<Letter[]>(
+        getLetters(englishCharacters)
+    );
     const [letterClicked, setLetterClicked] = useState<string | null>(null);
     const [token, setToken] = useState<string>(gameToken);
-    const [skip, setSkip] = useState<boolean>(true);
 
     const { data, isFetching } = useGuessOneLetterQuery(
         {
@@ -31,26 +40,13 @@ const LetterKeyBoard = ({
         { skip }
     );
 
-    console.log(isFetching);
-
     useEffect(() => {
         if (!data) return;
+        if (!data.correct) changeAmountOfWrongAnswer();
 
         setToken(data.token);
 
-        if (!data.correct) {
-            changeAmountOfWrongAnswer();
-        }
-        setLetterList((letterList) =>
-            letterList.map((letter) =>
-                letter.value === letterClicked
-                    ? { value: letter.value, isClicked: true }
-                    : letter
-            )
-        );
-        changeHangmanState(data.hangman);
-
-        console.log(data);
+        changeHangmanWord(data.hangman);
     }, [data]);
 
     const handleLetterClick = (
@@ -58,29 +54,62 @@ const LetterKeyBoard = ({
     ) => {
         if (isFetching) return;
 
-        const eventLetterClicked: string = (e.target as HTMLButtonElement)
-            .innerText;
+        const letter: string = (e.target as HTMLButtonElement).innerText;
 
-        setSkip(false);
-        setLetterClicked(eventLetterClicked);
+        setLetterList((letterList) =>
+            letterList.map((element) =>
+                element.value === letter
+                    ? { value: element.value, isClicked: true }
+                    : element
+            )
+        );
+
+        changeSkip(false);
+        setLetterClicked(letter);
     };
 
+    const restartGame = () => {
+        window.location.reload();
+    };
+
+    console.log(isGameOver);
+
     return (
-        <Wrap w={"45%"} justify={"center"} spacing={2}>
-            {letterList.map((value) => (
-                <WrapItem key={value.value}>
-                    <Button
-                        colorScheme={"purple"}
-                        size={"lg"}
-                        variant={"ghost"}
-                        disabled={value.isClicked}
-                        onClick={(event) => handleLetterClick(event)}
-                    >
-                        {value.value}
-                    </Button>
-                </WrapItem>
-            ))}
-        </Wrap>
+        <VStack spacing={10}>
+            <Center h={10}>
+                {!skip &&
+                    (isGameOver ? (
+                        <Button
+                            size={"sm"}
+                            colorScheme={"purple"}
+                            variant={"outline"}
+                            onClick={restartGame}
+                        >
+                            Restart game
+                        </Button>
+                    ) : isFetching ? (
+                        <Spinner />
+                    ) : (
+                        <AnswerIcon correct={data!.correct} />
+                    ))}
+            </Center>
+
+            <Wrap w={"45%"} justify={"center"} spacing={2}>
+                {letterList.map((value) => (
+                    <WrapItem key={value.value}>
+                        <Button
+                            colorScheme={"purple"}
+                            size={"md"}
+                            variant={"ghost"}
+                            disabled={isGameOver ? isGameOver : value.isClicked}
+                            onClick={(event) => handleLetterClick(event)}
+                        >
+                            {value.value}
+                        </Button>
+                    </WrapItem>
+                ))}
+            </Wrap>
+        </VStack>
     );
 };
 
