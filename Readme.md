@@ -4,9 +4,7 @@
 
 -   TypeScript
 -   React
--   Redux
--   Socket.io
+-   RTK Query
 -   Vite
--   Jest
--   Domain Driven Design
--
+
+-   Planning on adding web sockets for multiplayer purposes
