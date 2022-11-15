@@ -1,4 +1,4 @@
-# Hangman Multiplayer game.
+# The Hangman Game
 
 ## Tech stack used:
 
