@@ -5,6 +5,6 @@
 -   TypeScript
 -   React
 -   RTK Query
--   Vite
+-   Chakra UI
 
--   Planning on adding web sockets for multiplayer purposes
+Planning on adding web sockets for multiplayer purposes in the future
